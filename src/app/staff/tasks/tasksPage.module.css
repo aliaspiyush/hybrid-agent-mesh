@@ -1,0 +1,31 @@
+.page { display: flex; flex-direction: column; gap: var(--space-5); }
+.empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-8) var(--space-5);
+  color: var(--text-muted);
+  font-size: var(--text-sm);
+}
+.empty span { font-size: 32px; opacity: 0.4; }
+.title { font-size: var(--text-2xl); font-weight: 700; }
+.taskList { display: flex; flex-direction: column; gap: var(--space-2); }
+.taskItem {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-4);
+  background: var(--bg-secondary);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  transition: all var(--duration-fast) var(--ease-out);
+}
+.taskItem:hover {
+  border-color: var(--accent-blue);
+  background: var(--surface);
+}
+.taskIcon { font-size: var(--text-lg); width: 28px; text-align: center; }
+.taskInfo { flex: 1; }
+.taskTitle { display: block; font-size: var(--text-sm); font-weight: 600; }
+.taskMeta { display: block; font-size: var(--text-xs); color: var(--text-muted); margin-top: 2px; }

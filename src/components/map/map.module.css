@@ -1,0 +1,180 @@
+/* ═══════════════════════════════════════════
+   Venue Map Styles
+   ═══════════════════════════════════════════ */
+
+.mapWrapper {
+  position: relative;
+  width: 100%;
+  background: var(--bg-secondary);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+}
+
+.mapCompact .mapSvg {
+  max-height: 350px;
+}
+
+.mapSvg {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* ── Zone Interaction ── */
+.zoneGroup {
+  cursor: pointer;
+  transition: opacity 0.15s ease;
+}
+.zoneGroup:hover {
+  opacity: 0.9;
+}
+
+.zonePath {
+  transition: fill 0.6s ease, stroke 0.2s ease, stroke-width 0.2s ease;
+}
+
+.zoneLabel {
+  fill: hsla(210, 40%, 90%, 0.75);
+  font-family: var(--font-sans);
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  pointer-events: none;
+  user-select: none;
+}
+
+.fieldLabel {
+  fill: hsla(120, 30%, 55%, 0.5);
+  font-family: var(--font-sans);
+  font-size: 13px;
+  font-weight: 700;
+  pointer-events: none;
+  user-select: none;
+}
+
+.facilityLabel {
+  fill: hsla(210, 40%, 92%, 0.85);
+  font-family: var(--font-sans);
+  font-weight: 600;
+  pointer-events: none;
+  user-select: none;
+}
+
+/* ── Queue Badges ── */
+.queueBadge {
+  pointer-events: none;
+  animation: badge-pop 0.3s var(--ease-spring) both;
+}
+
+.queueText {
+  fill: white;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 700;
+  pointer-events: none;
+}
+
+@keyframes badge-pop {
+  from { opacity: 0; transform: scale(0.7); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+/* ── Staff Pins ── */
+.staffPin {
+  pointer-events: none;
+  animation: pin-drop 0.4s var(--ease-spring) both;
+}
+
+.staffEmoji {
+  font-size: 10px;
+  pointer-events: none;
+}
+
+@keyframes pin-drop {
+  from { opacity: 0; transform: translateY(-8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ── Tooltip ── */
+.tooltip {
+  position: absolute;
+  z-index: 50;
+  background: var(--bg-glass-heavy);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: var(--space-3) var(--space-4);
+  min-width: 180px;
+  pointer-events: none;
+  animation: tooltip-in 0.15s var(--ease-out);
+  box-shadow: var(--shadow-lg);
+}
+
+@keyframes tooltip-in {
+  from { opacity: 0; transform: translateY(4px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.tooltipTitle {
+  font-size: var(--text-sm);
+  font-weight: 700;
+  margin-bottom: var(--space-2);
+  color: var(--text-primary);
+}
+
+.tooltipRow {
+  display: flex;
+  justify-content: space-between;
+  font-size: var(--text-xs);
+  padding: 2px 0;
+  color: var(--text-secondary);
+}
+
+.tooltipRow span:last-child {
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+
+.density-low { color: var(--accent-green) !important; }
+.density-moderate { color: var(--accent-amber) !important; }
+.density-high { color: var(--accent-red) !important; }
+.density-critical { color: var(--accent-red) !important; font-weight: 800 !important; }
+
+/* ── Legend ── */
+.legend {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-3) var(--space-4);
+  border-top: 1px solid var(--border);
+  font-size: var(--text-xs);
+}
+
+.legendLabel {
+  color: var(--text-muted);
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.legendScale {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.legendItem {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.legendDot {
+  width: 12px;
+  height: 8px;
+  border-radius: 2px;
+}
+
+.legendText {
+  color: var(--text-muted);
+  font-size: 10px;
+}

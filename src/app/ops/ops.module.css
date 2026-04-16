@@ -1,0 +1,13 @@
+.opsShell {
+  display: flex;
+  min-height: 100vh;
+  background: var(--bg-primary);
+}
+
+.opsMain {
+  flex: 1;
+  margin-left: 260px;
+  padding: var(--space-6);
+  padding-bottom: 120px;
+  overflow-y: auto;
+}

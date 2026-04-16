@@ -1,0 +1,181 @@
+.page {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+}
+
+.header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+}
+
+.title {
+  font-size: var(--text-3xl);
+  font-weight: 800;
+  background: linear-gradient(135deg, var(--accent-cyan), var(--accent-blue));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.subtitle {
+  font-size: var(--text-sm);
+  color: var(--text-secondary);
+  margin-top: var(--space-1);
+}
+
+.headerStatus {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.headerTime {
+  font-size: var(--text-sm);
+  color: var(--text-muted);
+  font-family: var(--font-mono);
+}
+
+.kpiRow {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--space-4);
+}
+
+.mainGrid {
+  display: grid;
+  grid-template-columns: 1fr 360px;
+  gap: var(--space-5);
+  min-height: 500px;
+}
+
+/* ── Map Area ── */
+.mapArea {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  position: relative;
+}
+
+.mapPlaceholder {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  min-height: 500px;
+  gap: var(--space-3);
+  color: var(--text-muted);
+  font-size: var(--text-base);
+}
+
+.mapIcon { font-size: 48px; opacity: 0.4; }
+
+.mapHint {
+  font-size: var(--text-xs);
+  color: var(--text-muted);
+  opacity: 0.6;
+}
+
+/* ── Side Panel ── */
+.sidePanel {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+}
+
+.panelSection {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: var(--space-5);
+}
+
+.panelTitle {
+  font-size: var(--text-sm);
+  font-weight: 600;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: var(--space-4);
+}
+
+/* ── Agent List ── */
+.agentList {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.agentItem {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-2) 0;
+}
+
+.agentIcon { font-size: var(--text-lg); width: 28px; text-align: center; }
+
+.agentInfo { flex: 1; }
+
+.agentName {
+  display: block;
+  font-size: var(--text-sm);
+  font-weight: 600;
+}
+
+.agentAction {
+  display: block;
+  font-size: var(--text-xs);
+  color: var(--text-muted);
+}
+
+/* ── Alert List ── */
+.alertList {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.alertItem {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-3);
+  padding: var(--space-3);
+  border-radius: var(--radius-md);
+  font-size: var(--text-sm);
+  animation: fade-in 0.3s var(--ease-out) both;
+}
+
+.alertItem-info { background: var(--accent-blue-dim); }
+.alertItem-warning { background: var(--accent-amber-dim); }
+.alertItem-critical { background: var(--accent-red-dim); }
+
+.alertContent { flex: 1; }
+
+.alertMsg {
+  display: block;
+  font-size: var(--text-sm);
+  line-height: 1.4;
+}
+
+.alertTime {
+  display: block;
+  font-size: var(--text-xs);
+  color: var(--text-muted);
+  margin-top: 2px;
+}
+
+.emptyState {
+  padding: var(--space-5);
+  text-align: center;
+  color: var(--text-muted);
+  font-size: var(--text-sm);
+}
+
+@keyframes fade-in {
+  from { opacity: 0; transform: translateY(4px); }
+  to { opacity: 1; transform: translateY(0); }
+}

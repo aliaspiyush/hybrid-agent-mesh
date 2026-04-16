@@ -1,0 +1,290 @@
+/* ═══════════════════════════════════════════
+   Layout & Navigation Styles
+   ═══════════════════════════════════════════ */
+
+/* ── ROLE SELECTOR ── */
+.roleGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: var(--space-5);
+  max-width: 960px;
+  margin: 0 auto;
+  padding: var(--space-5);
+}
+
+.roleCard {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: var(--space-4);
+  padding: var(--space-7) var(--space-6);
+  background: var(--bg-secondary);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-xl);
+  transition: all var(--duration-normal) var(--ease-out);
+  position: relative;
+  overflow: hidden;
+  animation: fade-in-up 0.5s var(--ease-out) both;
+}
+.roleCard::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 50% 0%, hsla(217, 91%, 60%, 0.06), transparent 70%);
+  pointer-events: none;
+}
+.roleCard:hover {
+  transform: translateY(-6px);
+  border-color: var(--accent-blue);
+  box-shadow: var(--shadow-lg), var(--shadow-glow);
+}
+.roleCard:hover .roleArrow {
+  transform: translateX(4px);
+  opacity: 1;
+}
+
+.roleIconWrap {
+  width: 72px;
+  height: 72px;
+  border-radius: var(--radius-lg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: var(--shadow-md);
+}
+
+.roleIcon { font-size: 32px; }
+
+.roleLabel {
+  font-size: var(--text-xl);
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.roleDesc {
+  font-size: var(--text-sm);
+  color: var(--text-secondary);
+  line-height: 1.5;
+}
+
+.roleArrow {
+  font-size: var(--text-xl);
+  color: var(--accent-blue);
+  opacity: 0;
+  transition: all var(--duration-normal) var(--ease-out);
+}
+
+/* ── MOBILE NAV (Attendee) ── */
+.mobileNav {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  justify-content: space-around;
+  background: var(--bg-glass-heavy);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-top: 1px solid var(--border);
+  padding: var(--space-2) 0;
+  padding-bottom: calc(var(--space-2) + env(safe-area-inset-bottom));
+  z-index: 100;
+}
+
+.mobileNavItem {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  padding: var(--space-2) var(--space-3);
+  color: var(--text-muted);
+  font-size: var(--text-xs);
+  transition: color var(--duration-fast);
+  border-radius: var(--radius-md);
+}
+.mobileNavItem:hover { color: var(--text-secondary); }
+
+.mobileNavActive {
+  color: var(--accent-blue) !important;
+}
+
+.mobileNavIcon { font-size: 20px; }
+.mobileNavLabel { font-weight: 500; }
+
+/* ── TABLET NAV (Staff) ── */
+.tabletNav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--space-3) var(--space-5);
+  background: var(--bg-glass-heavy);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--border);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.tabletNavBrand {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.tabletNavLogo { font-size: 24px; }
+
+.tabletNavTitle {
+  font-size: var(--text-lg);
+  font-weight: 700;
+}
+
+.tabletNavLinks {
+  display: flex;
+  gap: var(--space-1);
+}
+
+.tabletNavLink {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-2) var(--space-4);
+  border-radius: var(--radius-md);
+  font-size: var(--text-sm);
+  font-weight: 500;
+  color: var(--text-secondary);
+  transition: all var(--duration-fast) var(--ease-out);
+}
+.tabletNavLink:hover {
+  background: var(--surface);
+  color: var(--text-primary);
+}
+
+.tabletNavLinkActive {
+  background: var(--accent-blue-dim) !important;
+  color: var(--accent-blue) !important;
+}
+
+.tabletNavStatus {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-size: var(--text-sm);
+  color: var(--accent-green);
+  font-weight: 500;
+}
+
+.onDutyDot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--accent-green);
+  box-shadow: 0 0 8px var(--accent-green);
+  animation: pulse 2s ease-in-out infinite;
+}
+
+/* ── SIDEBAR (Ops) ── */
+.sidebar {
+  width: 260px;
+  height: 100vh;
+  position: fixed;
+  top: 0;
+  left: 0;
+  display: flex;
+  flex-direction: column;
+  background: var(--bg-secondary);
+  border-right: 1px solid var(--border);
+  z-index: 100;
+}
+
+.sidebarBrand {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-5);
+  border-bottom: 1px solid var(--border);
+}
+
+.sidebarLogo {
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, var(--accent-cyan), var(--accent-blue));
+  border-radius: var(--radius-md);
+  font-size: 20px;
+  color: white;
+}
+
+.sidebarTitle {
+  font-size: var(--text-sm);
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.sidebarSubtitle {
+  font-size: var(--text-xs);
+  color: var(--text-muted);
+}
+
+.sidebarNav {
+  flex: 1;
+  padding: var(--space-4);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+.sidebarLink {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-3) var(--space-4);
+  border-radius: var(--radius-md);
+  font-size: var(--text-sm);
+  font-weight: 500;
+  color: var(--text-secondary);
+  transition: all var(--duration-fast) var(--ease-out);
+}
+.sidebarLink:hover {
+  background: var(--surface);
+  color: var(--text-primary);
+}
+
+.sidebarLinkActive {
+  background: var(--accent-blue-dim) !important;
+  color: var(--accent-blue) !important;
+  font-weight: 600;
+}
+
+.sidebarLinkIcon { font-size: var(--text-lg); width: 24px; text-align: center; }
+
+.sidebarFooter {
+  padding: var(--space-4);
+  border-top: 1px solid var(--border);
+}
+
+.sidebarBackLink {
+  display: block;
+  padding: var(--space-3) var(--space-4);
+  font-size: var(--text-sm);
+  color: var(--text-muted);
+  border-radius: var(--radius-md);
+  transition: all var(--duration-fast);
+}
+.sidebarBackLink:hover {
+  background: var(--surface);
+  color: var(--text-secondary);
+}
+
+@keyframes fade-in-up {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}

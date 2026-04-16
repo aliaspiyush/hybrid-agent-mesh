@@ -1,0 +1,87 @@
+.page {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+.title {
+  font-size: var(--text-xl);
+  font-weight: 700;
+}
+.mapContainer {
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  border: 1px solid var(--border);
+}
+
+/* ── Zone Detail Panel ── */
+.zoneDetail {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: var(--space-4);
+  animation: slide-up 0.3s var(--ease-out);
+}
+
+@keyframes slide-up {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.detailHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--space-3);
+}
+
+.detailHeader h3 {
+  font-size: var(--text-base);
+  font-weight: 700;
+}
+
+.closeBtn {
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-sm);
+  font-size: var(--text-sm);
+  color: var(--text-muted);
+  transition: all var(--duration-fast);
+}
+.closeBtn:hover {
+  background: var(--surface);
+  color: var(--text-primary);
+}
+
+.detailGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-3);
+}
+
+.detailItem {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.detailLabel {
+  font-size: var(--text-xs);
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  font-weight: 600;
+}
+
+.detailValue {
+  font-size: var(--text-lg);
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+
+.val-low { color: var(--accent-green); }
+.val-moderate { color: var(--accent-amber); }
+.val-high { color: var(--accent-red); }
+.val-critical { color: var(--accent-red); text-shadow: 0 0 8px hsla(0, 84%, 60%, 0.4); }

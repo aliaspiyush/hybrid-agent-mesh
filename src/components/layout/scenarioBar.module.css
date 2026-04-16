@@ -1,0 +1,209 @@
+/* ═══════════════════════════════════════════
+   Scenario Bar — Floating Controller
+   ═══════════════════════════════════════════ */
+
+.bar {
+  position: fixed;
+  bottom: 16px;
+  right: 16px;
+  z-index: 200;
+  animation: slide-up 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes slide-up {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.barInner {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 10px 20px;
+  background: hsla(222, 40%, 10%, 0.92);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid hsla(220, 30%, 25%, 0.5);
+  border-radius: 16px;
+  box-shadow: 0 8px 32px hsla(0, 0%, 0%, 0.5), 0 0 1px hsla(217, 91%, 60%, 0.2);
+}
+
+/* ── Phase ── */
+.phaseSection {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 120px;
+}
+
+.phaseLabel {
+  font-size: 13px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.elapsed {
+  font-size: 11px;
+  color: hsla(215, 20%, 60%, 1);
+  font-family: 'JetBrains Mono', monospace;
+  font-variant-numeric: tabular-nums;
+}
+
+/* ── Progress ── */
+.progressSection {
+  width: 180px;
+  padding: 0 4px;
+}
+
+.progressTrack {
+  position: relative;
+  height: 4px;
+  background: hsla(220, 30%, 20%, 0.8);
+  border-radius: 4px;
+}
+
+.progressFill {
+  height: 100%;
+  background: linear-gradient(90deg, hsl(188, 90%, 55%), hsl(217, 91%, 60%));
+  border-radius: 4px;
+  transition: width 0.5s ease;
+}
+
+.phaseDot {
+  position: absolute;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: hsla(220, 30%, 30%, 0.8);
+  border: 1.5px solid hsla(220, 30%, 40%, 0.6);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  padding: 0;
+}
+
+.phaseDot:hover {
+  transform: translate(-50%, -50%) scale(1.4);
+  background: hsl(217, 91%, 60%);
+}
+
+.phaseDotActive {
+  background: hsl(188, 90%, 55%);
+  border-color: hsl(188, 90%, 55%);
+}
+
+.phaseDotCurrent {
+  background: hsl(217, 91%, 60%);
+  border-color: hsl(217, 91%, 60%);
+  box-shadow: 0 0 8px hsl(217, 91%, 60%);
+  width: 10px;
+  height: 10px;
+}
+
+/* ── Controls ── */
+.controls {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.playBtn, .pauseBtn {
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  font-size: 14px;
+  transition: all 0.15s ease;
+}
+
+.playBtn {
+  background: linear-gradient(135deg, hsl(152, 69%, 50%), hsl(152, 69%, 40%));
+  color: white;
+  box-shadow: 0 2px 12px hsla(152, 69%, 50%, 0.3);
+}
+
+.playBtn:hover {
+  transform: scale(1.1);
+  box-shadow: 0 4px 16px hsla(152, 69%, 50%, 0.4);
+}
+
+.pauseBtn {
+  background: hsla(38, 92%, 55%, 0.2);
+  color: hsl(38, 92%, 55%);
+}
+
+.pauseBtn:hover {
+  background: hsla(38, 92%, 55%, 0.3);
+}
+
+.speedGroup {
+  display: flex;
+  gap: 2px;
+  background: hsla(222, 35%, 14%, 0.8);
+  border-radius: 8px;
+  padding: 2px;
+}
+
+.speedBtn {
+  padding: 4px 8px;
+  font-size: 10px;
+  font-weight: 600;
+  font-family: 'JetBrains Mono', monospace;
+  border-radius: 6px;
+  color: hsla(215, 20%, 55%, 1);
+  transition: all 0.15s ease;
+}
+
+.speedBtn:hover {
+  background: hsla(217, 91%, 60%, 0.1);
+  color: hsl(210, 40%, 90%);
+}
+
+.speedBtnActive {
+  background: hsla(217, 91%, 60%, 0.2) !important;
+  color: hsl(217, 91%, 60%) !important;
+}
+
+.resetBtn {
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  border-radius: 50%;
+  color: hsla(215, 20%, 55%, 1);
+  transition: all 0.15s ease;
+}
+
+.resetBtn:hover {
+  background: hsla(0, 84%, 60%, 0.15);
+  color: hsl(0, 84%, 60%);
+  transform: rotate(-90deg);
+}
+
+/* ── Attendance ── */
+.attendance {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding-left: 12px;
+  border-left: 1px solid hsla(220, 30%, 25%, 0.5);
+}
+
+.attendanceIcon { font-size: 14px; }
+
+.attendanceValue {
+  font-size: 13px;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  color: hsl(188, 90%, 55%);
+}
+
+.attendanceTotal {
+  font-size: 10px;
+  color: hsla(215, 15%, 40%, 1);
+}

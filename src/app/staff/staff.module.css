@@ -1,0 +1,15 @@
+.staffShell {
+  min-height: 100vh;
+  background: var(--bg-primary);
+  display: flex;
+  flex-direction: column;
+}
+
+.staffMain {
+  padding: var(--space-5);
+  padding-bottom: 120px;
+  max-width: 1024px;
+  margin: 0 auto;
+  flex: 1;
+  width: 100%;
+}

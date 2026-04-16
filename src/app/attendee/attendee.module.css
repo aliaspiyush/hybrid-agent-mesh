@@ -1,0 +1,33 @@
+.attendeeShell {
+  max-width: 430px;
+  margin: 0 auto;
+  min-height: 100vh;
+  position: relative;
+  background: var(--bg-primary);
+}
+
+.attendeeHeader {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-4) var(--space-5);
+  background: var(--bg-glass-heavy);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--border);
+  position: sticky;
+  top: 0;
+  z-index: 50;
+}
+
+.headerIcon { font-size: 20px; }
+
+.headerTitle {
+  font-size: var(--text-base);
+  font-weight: 700;
+}
+
+.attendeeMain {
+  padding: var(--space-5);
+  padding-bottom: 140px; /* Space for MobileNav + ScenarioBar */
+}
