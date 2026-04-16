@@ -203,7 +203,7 @@ The architecture is intentionally flat for Phase 1. Every agent is a pure TypeSc
 
 ## 👤 Built By
 
-**Piyush Ghosh** — [Gravity Labs](https://thegravitylabs.in) · Kolkata, India
+**Piyush Ghosh** · Kolkata, India
 
 *Built using Google Antigravity as part of the agentic development challenge.*
 
