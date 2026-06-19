@@ -1,0 +1,60 @@
+.card {
+  background: rgba(20, 20, 25, 0.9);
+  border-radius: 8px;
+  padding: 1rem;
+  margin-bottom: 1rem;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+  border-left: 4px solid #3b82f6;
+  animation: fadeIn 0.4s ease-out forwards;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.borderBlue { border-left-color: #3b82f6; box-shadow: -4px 0 15px -4px rgba(59, 130, 246, 0.5); }
+.borderGreen { border-left-color: #10b981; box-shadow: -4px 0 15px -4px rgba(16, 185, 129, 0.5); }
+.borderAmber { border-left-color: #f59e0b; box-shadow: -4px 0 15px -4px rgba(245, 158, 11, 0.5); }
+.borderRed { border-left-color: #ef4444; box-shadow: -4px 0 15px -4px rgba(239, 68, 68, 0.5); }
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.5rem;
+}
+
+.label {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  font-weight: 700;
+  color: #9ca3af;
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.dismissBtn {
+  background: none;
+  border: none;
+  color: #6b7280;
+  font-size: 1.25rem;
+  cursor: pointer;
+  padding: 0;
+  line-height: 1;
+  transition: color 0.2s;
+}
+
+.dismissBtn:hover {
+  color: #f3f4f6;
+}
+
+.content {
+  font-size: 0.875rem;
+  color: #e5e7eb;
+  line-height: 1.4;
+}

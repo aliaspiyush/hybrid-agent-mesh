@@ -66,3 +66,14 @@ export function evaluateQueueOptimizer(
     };
   });
 }
+
+export async function fetchQueueAiInsight(params: { stands: { id: string; name: string; waitMins: number }[]; zone: string }) {
+  const res = await fetch('/api/agents/queue-optimizer', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(params),
+  });
+  if (!res.ok) throw new Error('Failed to fetch AI insight');
+  return res.json() as Promise<{ recommended: string; reason: string; estimatedWait: number }>;
+}
+

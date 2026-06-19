@@ -314,3 +314,40 @@
   0%, 100% { opacity: 1; }
   50% { opacity: 0.5; }
 }
+
+/* ── SKELETON LOADERS ── */
+.skeletonKpi {
+  background: var(--surface);
+  border-color: var(--border);
+}
+.skeletonKpi * {
+  animation: skeleton-pulse 1.5s infinite ease-in-out;
+}
+
+.skeletonIcon {
+  width: 24px;
+  height: 24px;
+  background: var(--border);
+  border-radius: var(--radius-sm);
+}
+
+.skeletonLabel {
+  width: 60%;
+  height: 12px;
+  background: var(--border);
+  border-radius: var(--radius-sm);
+}
+
+.skeletonValue {
+  width: 40%;
+  height: 32px;
+  background: var(--border);
+  border-radius: var(--radius-sm);
+  margin-top: 8px;
+}
+
+@keyframes skeleton-pulse {
+  0% { opacity: 0.6; }
+  50% { opacity: 0.3; }
+  100% { opacity: 0.6; }
+}

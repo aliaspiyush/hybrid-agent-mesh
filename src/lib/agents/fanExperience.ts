@@ -96,3 +96,14 @@ export function evaluateFanExperience(
 
   return recs.slice(0, 6); // Max 6 recommendations
 }
+
+export async function fetchFanAiInsight(params: { currentZone: string; eventPhase: string; queueData: { food: number; restroom: number; merch: number }; crowdLevel: string }) {
+  const res = await fetch('/api/agents/fan-recommendations', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(params),
+  });
+  if (!res.ok) throw new Error('Failed to fetch AI insight');
+  return res.json() as Promise<{ tips: string[]; generatedAt: string }>;
+}
+

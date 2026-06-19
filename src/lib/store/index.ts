@@ -1,12 +1,13 @@
 import { create } from 'zustand';
 import type { Zone, QueuePoint, StaffMember, Incident, Alert, AgentStatus, ScenarioPhase } from '@/lib/types';
-import { venueZones, queuePoints, staffRoster, initialAgentStatuses, sampleIncidents } from '@/lib/data/venue';
-import { evaluateCrowdFlow } from '@/lib/agents/crowdFlow';
-import { evaluateQueueOptimizer } from '@/lib/agents/queueOptimizer';
+import { venueZones, queuePoints, staffRoster, initialAgentStatuses } from '@/lib/data/venue';
+import { evaluateCrowdFlow, fetchCrowdFlowAiInsight } from '@/lib/agents/crowdFlow';
+import { evaluateQueueOptimizer, fetchQueueAiInsight } from '@/lib/agents/queueOptimizer';
 import { evaluateStaffDispatch } from '@/lib/agents/staffDispatch';
-import { evaluateIncidentCoord } from '@/lib/agents/incidentCoord';
-import { evaluateFanExperience } from '@/lib/agents/fanExperience';
+import { evaluateIncidentCoord, fetchIncidentAiInsight } from '@/lib/agents/incidentCoord';
+import { evaluateFanExperience, fetchFanAiInsight } from '@/lib/agents/fanExperience';
 import type { Recommendation } from '@/lib/types';
+import { env } from '@/lib/env';
 
 // ═══════════════════════════════════════════
 // SCENARIO STORE — Master clock
@@ -113,14 +114,39 @@ export const useScenarioStore = create<ScenarioStore>((set, get) => ({
     const newZones = evaluateCrowdFlow(venueState.zones, newPhase, arrived, state.totalAttendees);
     useVenueStore.setState({ zones: newZones });
 
+    if (env.NEXT_PUBLIC_AI_MODE === 'live' && !useVenueStore.getState().aiLoading && !useVenueStore.getState().aiInsight) {
+      const congested = newZones.find(z => z.densityPct > 70);
+      if (congested) {
+        useVenueStore.setState({ aiLoading: true, aiError: null });
+        fetchCrowdFlowAiInsight({
+          zoneId: congested.id, density: congested.currentCount, capacityPercent: congested.densityPct, adjacentZones: []
+        }).then(res => useVenueStore.setState({ aiLoading: false, aiInsight: res }))
+          .catch(err => useVenueStore.setState({ aiLoading: false, aiError: err.message }));
+      }
+    }
+
     const newQueues = evaluateQueueOptimizer(queueState.queues, newPhase, newZones);
     useQueueStore.setState({ queues: newQueues });
 
+    if (env.NEXT_PUBLIC_AI_MODE === 'live' && !useQueueStore.getState().aiLoading && !useQueueStore.getState().aiInsight) {
+      const busyZone = newZones.find(z => z.type === 'concourse' && z.densityPct > 50);
+      if (busyZone) {
+        useQueueStore.setState({ aiLoading: true, aiError: null });
+        fetchQueueAiInsight({
+          stands: newQueues.filter(q => q.type === 'food' || q.type === 'beverage').slice(0, 4).map(q => ({ id: q.id, name: q.name, waitMins: Math.round(q.estimatedWaitSec / 60) })),
+          zone: busyZone.name
+        }).then(res => useQueueStore.setState({ aiLoading: false, aiInsight: res }))
+          .catch(err => useQueueStore.setState({ aiLoading: false, aiError: err.message }));
+      }
+    }
+
     const staffState = useStaffStore.getState();
-    const { staff: newStaff, tasks: newTasks, newAlerts: staffAlerts } = evaluateStaffDispatch(
-      staffState.staff, staffState.tasks, newZones, newPhase
+    const { staff: updatedStaff, tasks: updatedTasks, newAlerts: staffAlerts } = evaluateStaffDispatch(
+      staffState.staff,
+      staffState.tasks,
+      newZones
     );
-    useStaffStore.setState({ staff: newStaff, tasks: newTasks });
+    useStaffStore.setState({ staff: updatedStaff, tasks: updatedTasks });
 
     const incState = useIncidentStore.getState();
     const { incidents: newIncidents, newAlerts: incAlerts } = evaluateIncidentCoord(
@@ -128,8 +154,27 @@ export const useScenarioStore = create<ScenarioStore>((set, get) => ({
     );
     useIncidentStore.setState({ incidents: newIncidents });
 
+    if (env.NEXT_PUBLIC_AI_MODE === 'live' && !useIncidentStore.getState().aiLoading && !useIncidentStore.getState().aiInsight) {
+      const activeInc = newIncidents.find(i => i.status === 'reported');
+      if (activeInc) {
+        useIncidentStore.setState({ aiLoading: true, aiError: null });
+        fetchIncidentAiInsight({ description: activeInc.description, zone: activeInc.zoneId, severity: activeInc.severity })
+          .then(res => useIncidentStore.setState({ aiLoading: false, aiInsight: res }))
+          .catch(err => useIncidentStore.setState({ aiLoading: false, aiError: err.message }));
+      }
+    }
+
     const newRecs = evaluateFanExperience(newZones, newQueues, newPhase);
     useRecommendationStore.setState({ recommendations: newRecs });
+
+    if (env.NEXT_PUBLIC_AI_MODE === 'live' && !useRecommendationStore.getState().aiLoading && !useRecommendationStore.getState().aiInsight) {
+      useRecommendationStore.setState({ aiLoading: true, aiError: null });
+      fetchFanAiInsight({
+        currentZone: 'Concourse South', eventPhase: newPhase,
+        queueData: { food: 5, restroom: 2, merch: 10 }, crowdLevel: 'normal'
+      }).then(res => useRecommendationStore.setState({ aiLoading: false, aiInsight: res }))
+        .catch(err => useRecommendationStore.setState({ aiLoading: false, aiError: err.message }));
+    }
 
     // Merge new alerts
     const allNewAlerts = [...staffAlerts, ...incAlerts];
@@ -199,10 +244,18 @@ function getAgentActionLabel(agentId: string, phase: ScenarioPhase): string {
 
 interface VenueStore {
   zones: Zone[];
+  aiLoading: boolean;
+  aiError: string | null;
+  aiInsight: { recommendation: string; confidence: string; timestamp: string } | null;
+  clearAiInsight: () => void;
 }
 
-export const useVenueStore = create<VenueStore>(() => ({
+export const useVenueStore = create<VenueStore>((set) => ({
   zones: venueZones.map(z => ({ ...z })),
+  aiLoading: false,
+  aiError: null,
+  aiInsight: null,
+  clearAiInsight: () => set({ aiInsight: null }),
 }));
 
 // ═══════════════════════════════════════════
@@ -211,10 +264,18 @@ export const useVenueStore = create<VenueStore>(() => ({
 
 interface QueueStore {
   queues: QueuePoint[];
+  aiLoading: boolean;
+  aiError: string | null;
+  aiInsight: { recommended: string; reason: string; estimatedWait: number } | null;
+  clearAiInsight: () => void;
 }
 
-export const useQueueStore = create<QueueStore>(() => ({
+export const useQueueStore = create<QueueStore>((set) => ({
   queues: queuePoints.map(q => ({ ...q })),
+  aiLoading: false,
+  aiError: null,
+  aiInsight: null,
+  clearAiInsight: () => set({ aiInsight: null }),
 }));
 
 // ═══════════════════════════════════════════
@@ -224,11 +285,15 @@ export const useQueueStore = create<QueueStore>(() => ({
 interface StaffStore {
   staff: StaffMember[];
   tasks: import('@/lib/types').Task[];
+  aiLoading: boolean;
+  aiError: string | null;
 }
 
 export const useStaffStore = create<StaffStore>(() => ({
   staff: staffRoster.map(s => ({ ...s })),
   tasks: [],
+  aiLoading: false,
+  aiError: null,
 }));
 
 // ═══════════════════════════════════════════
@@ -237,10 +302,18 @@ export const useStaffStore = create<StaffStore>(() => ({
 
 interface IncidentStore {
   incidents: Incident[];
+  aiLoading: boolean;
+  aiError: string | null;
+  aiInsight: { escalate: boolean; suggestedAction: string; alertLevel: string } | null;
+  clearAiInsight: () => void;
 }
 
-export const useIncidentStore = create<IncidentStore>(() => ({
+export const useIncidentStore = create<IncidentStore>((set) => ({
   incidents: [],
+  aiLoading: false,
+  aiError: null,
+  aiInsight: null,
+  clearAiInsight: () => set({ aiInsight: null }),
 }));
 
 // ═══════════════════════════════════════════
@@ -277,8 +350,16 @@ export const useAgentStore = create<AgentStore>(() => ({
 
 interface RecommendationStore {
   recommendations: Recommendation[];
+  aiLoading: boolean;
+  aiError: string | null;
+  aiInsight: { tips: string[]; generatedAt: string } | null;
+  clearAiInsight: () => void;
 }
 
-export const useRecommendationStore = create<RecommendationStore>(() => ({
+export const useRecommendationStore = create<RecommendationStore>((set) => ({
   recommendations: [],
+  aiLoading: false,
+  aiError: null,
+  aiInsight: null,
+  clearAiInsight: () => set({ aiInsight: null }),
 }));

@@ -1,7 +1,7 @@
 'use client';
 
-import { KpiCard } from '@/components/ui';
-import { useScenarioStore, useQueueStore, useVenueStore } from '@/lib/store';
+import { KpiCard, AiInsightCard } from '@/components/ui';
+import { useScenarioStore, useQueueStore, useRecommendationStore } from '@/lib/store';
 import { currentEvent } from '@/lib/data/venue';
 import styles from './attendeePage.module.css';
 
@@ -10,10 +10,15 @@ export default function AttendeePage() {
   const totalAttendees = useScenarioStore((s) => s.totalAttendees);
   const queues = useQueueStore((s) => s.queues);
 
+  const fanInsight = useRecommendationStore(s => s.aiInsight);
+  const clearFanInsight = useRecommendationStore(s => s.clearAiInsight);
+
   const capacityPct = totalAttendees > 0 ? Math.round((arrivedCount / totalAttendees) * 100) : 0;
   const avgWaitMin = queues.length > 0
     ? Math.round(queues.reduce((s, q) => s + q.estimatedWaitSec, 0) / queues.length / 60)
     : 0;
+
+  const aiLoading = useRecommendationStore(s => s.aiLoading);
 
   return (
     <div className={styles.page}>
@@ -28,9 +33,22 @@ export default function AttendeePage() {
         </p>
       </section>
 
+      {fanInsight && (
+        <AiInsightCard
+          title="Smart Tips from AI"
+          content={
+            <ul style={{ paddingLeft: '1rem', margin: 0 }}>
+              {fanInsight.tips.map((tip, idx) => <li key={idx}>{tip}</li>)}
+            </ul>
+          }
+          confidence="high"
+          onDismiss={clearFanInsight}
+        />
+      )}
+
       <section className={styles.kpiRow}>
-        <KpiCard label="Venue Capacity" value={`${capacityPct}%`} icon="🏟️" accentColor="var(--accent-cyan)" />
-        <KpiCard label="Avg Wait" value={`${avgWaitMin} min`} icon="⏱️" accentColor="var(--accent-amber)" />
+        <KpiCard label="Venue Capacity" value={`${capacityPct}%`} icon="🏟️" accentColor="var(--accent-cyan)" isLoading={aiLoading} />
+        <KpiCard label="Avg Wait" value={`${avgWaitMin} min`} icon="⏱️" accentColor="var(--accent-amber)" isLoading={aiLoading} />
       </section>
 
       <section className={styles.quickActions}>

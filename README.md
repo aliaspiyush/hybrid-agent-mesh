@@ -75,14 +75,19 @@ The system runs on a **scenario engine** — a master clock that simulates a rea
 Pre-Event → Ingress → Normal Play → Halftime Rush → Second Half → Egress
 ```
 
-On every tick, each mock agent evaluates current venue state and:
+On every tick, each agent evaluates current venue state and:
 - Updates zone density and congestion levels
 - Recalculates queue wait times
 - Auto-assigns staff tasks to the nearest available personnel
 - Triggers incidents at appropriate scenario phases
 - Generates new fan recommendations based on live conditions
 
-**Every piece of intelligence runs deterministically in the browser.** No Redis, no database, no microservices — just clean TypeScript logic that produces a convincing, presentation-grade experience.
+### 🤖 Gemini AI Integration
+The platform can operate in two modes, controlled via environment variables:
+- **Mock Mode (`NEXT_PUBLIC_AI_MODE=mock`)**: Every piece of intelligence runs deterministically in the browser. No Redis, no database, no microservices — just clean TypeScript logic.
+- **Live Mode (`NEXT_PUBLIC_AI_MODE=live`)**: The agents fetch dynamic, real-time insights from **Google's Gemini AI** via Next.js API routes (`/api/agents/*`). The AI processes real-time JSON state (e.g., crowd flow, wait times, incidents) and generates context-aware JSON responses to guide fans, staff, and operations seamlessly.
+
+All server-to-server communication is strictly typed and securely handles the `GEMINI_API_KEY` on the backend without exposing it to the client.
 
 ---
 
@@ -164,11 +169,17 @@ cd hybrid-agent-mesh
 # Install dependencies
 npm install
 
+# Environment Setup
+cp .env.example .env.local
+# Add your GEMINI_API_KEY to .env.local to test Live AI Mode
+# (By default NEXT_PUBLIC_AI_MODE is set to 'mock')
+
 # Start the development server
 npm run dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000) and select your role.
+If `NEXT_PUBLIC_AI_MODE=live`, you will see an "AI LIVE" badge in the Scenario Bar!
 
 ---
 

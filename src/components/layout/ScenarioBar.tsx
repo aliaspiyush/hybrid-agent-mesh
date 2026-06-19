@@ -58,6 +58,11 @@ export function ScenarioBar() {
 
         {/* Controls */}
         <div className={styles.controls}>
+          <div className={styles.aiToggle}>
+            <span className={styles.aiLiveDot} />
+            <span className={styles.aiLabel}>AI LIVE</span>
+          </div>
+
           {isPaused ? (
             <button className={styles.playBtn} onClick={elapsedMinutes === 0 ? start : resume} title="Play">
               ▶

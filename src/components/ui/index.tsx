@@ -2,6 +2,7 @@
 
 import React from 'react';
 import styles from './ui.module.css';
+export * from './AiInsightCard';
 
 // ═══════════════════════════════════════════
 // BUTTON
@@ -101,9 +102,22 @@ interface KpiCardProps {
   delta?: { value: number; label: string };
   trend?: 'up' | 'down' | 'stable';
   accentColor?: string;
+  isLoading?: boolean;
 }
 
-export function KpiCard({ label, value, icon, delta, trend, accentColor }: KpiCardProps) {
+export function KpiCard({ label, value, icon, delta, trend, accentColor, isLoading }: KpiCardProps) {
+  if (isLoading) {
+    return (
+      <div className={`${styles.kpiCard} ${styles.skeletonKpi}`} style={accentColor ? { '--kpi-accent': accentColor } as React.CSSProperties : undefined}>
+        <div className={styles.kpiHeader}>
+          <div className={styles.skeletonIcon} />
+          <div className={styles.skeletonLabel} />
+        </div>
+        <div className={styles.skeletonValue} />
+      </div>
+    );
+  }
+
   return (
     <div className={styles.kpiCard} style={accentColor ? { '--kpi-accent': accentColor } as React.CSSProperties : undefined}>
       <div className={styles.kpiHeader}>

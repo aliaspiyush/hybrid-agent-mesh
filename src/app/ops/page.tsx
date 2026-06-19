@@ -1,6 +1,8 @@
 'use client';
 
-import { KpiCard, Badge, StatusDot } from '@/components/ui';
+import { useState, useEffect } from 'react';
+
+import { KpiCard, Badge, StatusDot, AiInsightCard } from '@/components/ui';
 import { VenueMap } from '@/components/map/VenueMap';
 import { useVenueStore, useQueueStore, useStaffStore, useScenarioStore, useAgentStore, useAlertStore, useIncidentStore } from '@/lib/store';
 import styles from './opsPage.module.css';
@@ -27,6 +29,21 @@ export default function OpsCommandCenter() {
     : '0';
   const activeIncidents = incidents.filter(i => i.status !== 'resolved').length;
 
+  const venueInsight = useVenueStore(s => s.aiInsight);
+  const clearVenueInsight = useVenueStore(s => s.clearAiInsight);
+  const incidentInsight = useIncidentStore(s => s.aiInsight);
+  const clearIncidentInsight = useIncidentStore(s => s.clearAiInsight);
+
+  const venueLoading = useVenueStore(s => s.aiLoading);
+  const incidentLoading = useIncidentStore(s => s.aiLoading);
+  const aiLoading = venueLoading || incidentLoading;
+
+  const [now, setNow] = useState(() => Date.now());
+  useEffect(() => {
+    const timer = setInterval(() => setNow(Date.now()), 1000);
+    return () => clearInterval(timer);
+  }, []);
+
   return (
     <div className={styles.page}>
       <div className={styles.header}>
@@ -40,11 +57,29 @@ export default function OpsCommandCenter() {
         </div>
       </div>
 
+      {venueInsight && (
+        <AiInsightCard
+          title="Crowd Flow AI"
+          content={venueInsight.recommendation}
+          confidence={venueInsight.confidence as 'high' | 'medium' | 'low'}
+          onDismiss={clearVenueInsight}
+        />
+      )}
+
+      {incidentInsight && (
+        <AiInsightCard
+          title="Incident Classification AI"
+          content={`Suggested Action: ${incidentInsight.suggestedAction} ${incidentInsight.escalate ? '(ESCALATE)' : ''}`}
+          alertLevel={incidentInsight.alertLevel}
+          onDismiss={clearIncidentInsight}
+        />
+      )}
+
       <div className={styles.kpiRow}>
-        <KpiCard label="Attendance" value={arrivedCount.toLocaleString()} icon="👥" accentColor="var(--accent-cyan)" />
-        <KpiCard label="Venue Capacity" value={`${capacityPct}%`} icon="🏟️" accentColor="var(--accent-blue)" />
-        <KpiCard label="Avg Wait Time" value={`${avgWait}m`} icon="⏱️" accentColor="var(--accent-amber)" />
-        <KpiCard label="Active Incidents" value={String(activeIncidents)} icon="🚨" accentColor="var(--accent-red)" />
+        <KpiCard label="Attendance" value={arrivedCount.toLocaleString()} icon="👥" accentColor="var(--accent-cyan)" isLoading={aiLoading} />
+        <KpiCard label="Venue Capacity" value={`${capacityPct}%`} icon="🏟️" accentColor="var(--accent-blue)" isLoading={aiLoading} />
+        <KpiCard label="Avg Wait Time" value={`${avgWait}m`} icon="⏱️" accentColor="var(--accent-amber)" isLoading={aiLoading} />
+        <KpiCard label="Active Incidents" value={String(activeIncidents)} icon="🚨" accentColor="var(--accent-red)" isLoading={aiLoading} />
       </div>
 
       <div className={styles.mainGrid}>
@@ -88,7 +123,7 @@ export default function OpsCommandCenter() {
                   <div className={styles.alertContent}>
                     <span className={styles.alertMsg}>{alert.message}</span>
                     <span className={styles.alertTime}>
-                      {Math.round((Date.now() - alert.timestamp) / 1000)}s ago
+                      {Math.round((now - alert.timestamp) / 1000)}s ago
                     </span>
                   </div>
                 </div>

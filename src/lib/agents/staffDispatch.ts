@@ -1,4 +1,4 @@
-import type { StaffMember, Task, Zone, Alert, ScenarioPhase } from '@/lib/types';
+import type { StaffMember, Task, Zone, Alert } from '@/lib/types';
 
 /**
  * Staff Dispatch Agent — auto-assigns tasks when zones go critical, manages staff positions.
@@ -24,8 +24,7 @@ const taskTemplates: Record<string, { description: string; type: Task['type']; p
 export function evaluateStaffDispatch(
   staff: StaffMember[],
   tasks: Task[],
-  zones: Zone[],
-  phase: ScenarioPhase
+  zones: Zone[]
 ): { staff: StaffMember[]; tasks: Task[]; newAlerts: Alert[] } {
   const newAlerts: Alert[] = [];
   const newTasks = [...tasks];

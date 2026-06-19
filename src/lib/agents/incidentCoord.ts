@@ -69,3 +69,14 @@ export function evaluateIncidentCoord(
 
   return { incidents, newAlerts };
 }
+
+export async function fetchIncidentAiInsight(params: { description: string; zone: string; severity: string }) {
+  const res = await fetch('/api/agents/incident-classify', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(params),
+  });
+  if (!res.ok) throw new Error('Failed to fetch AI insight');
+  return res.json() as Promise<{ escalate: boolean; suggestedAction: string; alertLevel: string; estimatedResolutionMins: number }>;
+}
+

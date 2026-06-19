@@ -6,7 +6,7 @@ import styles from './analyticsPage.module.css';
 
 export default function AnalyticsPage() {
   const elapsed = useScenarioStore(s => s.elapsedMinutes);
-  const totalRaw = useScenarioStore(s => s.arrivedCount);
+
   const zones = useVenueStore(s => s.zones);
 
   const congestedCount = zones.filter(z => z.congestionLevel === 'critical' || z.congestionLevel === 'high').length;

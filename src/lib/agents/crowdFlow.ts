@@ -91,3 +91,14 @@ export function evaluateCrowdFlow(
     };
   });
 }
+
+export async function fetchCrowdFlowAiInsight(params: { zoneId: string; density: number; capacityPercent: number; adjacentZones: string[] }) {
+  const res = await fetch('/api/agents/crowd-flow', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(params),
+  });
+  if (!res.ok) throw new Error('Failed to fetch AI insight');
+  return res.json() as Promise<{ recommendation: string; confidence: string; timestamp: string }>;
+}
+
